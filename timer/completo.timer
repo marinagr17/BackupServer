@@ -1,0 +1,10 @@
+[Unit]
+Description=Ejecuta el backup completo domingo a las 20.00
+
+[Timer]
+OnCalendar=Sun 20:00
+Persistent=true
+Unit=completo.service
+
+[Install]
+WantedBy=timers.target

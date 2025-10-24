@@ -1,0 +1,13 @@
+[Unit]
+Description=Backup incremental
+After=multi-user.target
+#Esto significa que el servicio se iniciara cuando el sistema llegue al nivel>
+
+[Service]
+Type=simple
+User=root
+ExecStart=/home/debian/incremental.sh
+
+[Install]
+WantedBy=multi-user.target
+#Parecido al after

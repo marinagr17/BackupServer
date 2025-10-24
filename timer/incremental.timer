@@ -1,0 +1,10 @@
+[Unit]
+Description=Ejecuta el backup incremental de lunes a sabado a las 22h
+
+[Timer]
+OnCalendar=Mon..Sat 22:00
+Persistent=true
+Unit=incremental.service
+
+[Install]
+WantedBy=timers.target 

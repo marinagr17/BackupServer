@@ -1,0 +1,1 @@
+vg1    -fstype=ext4,nosuid,nodev    :/dev/vg1/lv-backup

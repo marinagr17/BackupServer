@@ -1,0 +1,10 @@
+[Unit]
+Description=Backup completo
+After=multi-user.target
+#Esto significa que el servicio se iniciara cuando el sistema llegue al nivel normal de arranque
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/home/debian/completo.sh
+
