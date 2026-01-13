@@ -7,10 +7,7 @@ COPIA="/var /etc /home /root /usr/local /opt /srv /boot"
 DATE=$(date +%F)
 RUTA_LOCAL="/mnt/vg1/full"
 CLAVE="/home/debian/.ssh/backup"
-DESTINO_REMOTO="debian@10.0.0.22:/mnt/backup/full/backup-$DATE"
-
-#lo primero será montar la partición
-#mount /dev/vg1/lv-backup /mnt/vg1/
+DESTINO_REMOTO="debian@10.0.0.47:/mnt/backup/full/backup-$DATE"
 
 #si no se ha montado:
 
@@ -23,7 +20,7 @@ fi
 
 #rsync para crear backup completo
 rsync -aAXHzv --delete $COPIA $RUTA_LOCAL/backup-$DATE
-#scp -i $CLAVE -r $RUTA_LOCAL/backup-$DATE debian@10.0.0.22:/home/debian/full/backup-$DATE
+#scp -i $CLAVE -r $RUTA_LOCAL/backup-$DATE debian@10.0.0.47:/home/debian/full/backup-$DATE
 #enviar backup al servidor remoto
 rsync -aAXHzv -e "ssh -i $CLAVE -o StrictHostKeyChecking=no" \
     $RUTA_LOCAL/backup-$DATE/ $DESTINO_REMOTO/
@@ -32,7 +29,6 @@ rsync -aAXHzv -e "ssh -i $CLAVE -o StrictHostKeyChecking=no" \
 echo "$DATE" > "$RUTA_LOCAL/last_full"
 
 #borrar copias con un mes de anitigüedad
-#find "$RUTA_LOCAL" -maxdepth 1 -type d -name "backup-*" -mtime +30 -exec rm -rf {} \;
 
 for dir in "$RUTA_LOCAL"/backup-*; do
     BACKDATE=$(basename "$dir" | sed 's/backup-//')
@@ -43,9 +39,8 @@ for dir in "$RUTA_LOCAL"/backup-*; do
 done
 
 # borrar copias remotas de más de 30 días
-#ssh -i "$CLAVE" debian@10.0.0.22 'find /mnt/backup/full -maxdepth 1 -type d -name "backup-*" -mtime +30 -exec rm -rf {} \;'
 
-ssh -i "$CLAVE" debian@10.0.0.22 '
+ssh -i "$CLAVE" debian@10.0.0.47 '
 for dir in /mnt/backup/full/backup-*; do
     BACKDATE=$(basename "$dir" | sed "s/backup-//")
     if [[ $(date -d "$BACKDATE" +%s) -lt $(date -d "30 days ago" +%s) ]]; then

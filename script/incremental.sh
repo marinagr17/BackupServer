@@ -31,8 +31,8 @@ fi
 
 #rsync
 sudo rsync -aAXHzv --delete --link-dest=$LDEST $COPIA $RUTA_LOCAL/back-$DATE
-#scp -i $CLAVE -r $RUTA_LOCAL/back-$DATE debian@10.0.0.22:/home/debian/incr/back-$DATE
-rsync -aAXHz --delete -e "ssh -i $CLAVE" $RUTA_LOCAL/back-$DATE/ debian@10.0.0.22:/mnt/backup/incr/back-$DATE/
+#scp -i $CLAVE -r $RUTA_LOCAL/back-$DATE debian@10.0.0.47:/home/debian/incr/back-$DATE
+rsync -aAXHz --delete -e "ssh -i $CLAVE" $RUTA_LOCAL/back-$DATE/ debian@10.0.0.47:/mnt/backup/incr/back-$DATE/
 
 #borrar copias que tengan un mes de antiguedad:
 #find "$RUTA_LOCAL" -maxdepth 1 -type d -name "back-*" -mtime +30 -exec rm -rf {} \;
@@ -48,9 +48,9 @@ done
 
 
 # borrar copias remotas de más de 30 días (opcional)
-#ssh -i "$CLAVE" debian@10.0.0.22 'find /mnt/backup/incr -maxdepth 1 -type d -name "back-*" -mtime +30 -exec rm -rf {} \;'
+#ssh -i "$CLAVE" debian@10.0.0.47 'find /mnt/backup/incr -maxdepth 1 -type d -name "back-*" -mtime +30 -exec rm -rf {} \;'
 
-ssh -i "$CLAVE" debian@10.0.0.22 '
+ssh -i "$CLAVE" debian@10.0.0.47 '
 for dir in /mnt/backup/incr/back-*; do
     BACKDATE=$(basename "$dir" | sed "s/back-//")
     if [[ $(date -d "$BACKDATE" +%s) -lt $(date -d "30 days ago" +%s) ]]; then
